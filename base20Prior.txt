@@ -1,0 +1,42 @@
+문제:소수판정
+
+답안:
+// don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+// don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+    public static void main(String[] args) throws IOException { 
+
+        Scanner scanner = new Scanner(System.in); 
+
+        int a = scanner.nextInt(); 
+
+        int cnt=1;
+        
+        boolean flag= true;
+        
+        for(int i=3;i<=a;i++)
+        {
+            flag=true;
+            for(int j=2;j<i;j++)
+            {
+                if(i%j==0)
+                {
+                    flag=false;
+                    break;
+                }
+            }
+            if(flag)
+                cnt++;
+        }
+        
+        
+        System.out.println(cnt); 
+
+    }
+}

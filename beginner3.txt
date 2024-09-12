@@ -1,0 +1,42 @@
+문제:
+N개의 서로 다른 정수가 정렬된 상태로 입력이 될 때 특정한 원소 A가 몇 번째에 위치해 있는지 알려주는 프로그램을 작성하세요. 
+단 특정한 원소 A를 찾을 수 없을 때는 -1을 출력합니다.
+
+
+
+
+
+
+
+
+답안:
+// don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+// don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+    public static void main(String[] args) throws IOException { 
+
+        Scanner scanner = new Scanner(System.in); 
+
+        int a = scanner.nextInt(); 
+
+        int b = scanner.nextInt(); 
+        
+        List<Integer> num= new ArrayList<>();
+        for(int i=0;i<a;i++)
+        {
+            num.add(scanner.nextInt());
+        }
+        
+        int result=num.indexOf(b);
+        if(result!=-1)
+            result+=1;
+        System.out.println(result); 
+
+    }
+}

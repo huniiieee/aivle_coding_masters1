@@ -1,0 +1,43 @@
+문제:
+신화중학교 3학년 2반 학생들은 며칠 전 IQ검사를 치루었고, 
+드디어 오늘 결과가 나왔습니다. 
+학생들은 반에서 IQ가 높은 학생이 누구인지 궁금해졌습니다. 
+학생들의 이름과 IQ가 입력될 때, IQ가 높은 순서대로 상위 3명의 이름을 출력하는 프로그램을 만드세요.
+ IQ가 같을 경우에는 먼저 입력된 학생의 이름을 출력합니다.
+
+ 답안:
+ // don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+// don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+    public static void main(String[] args) throws IOException { 
+
+        Scanner scanner = new Scanner(System.in); 
+
+        int num = scanner.nextInt(); 
+        scanner.nextLine(); 
+        List <String> info = new ArrayList<>();
+      
+        for(int i=0;i<num;i++)
+            info.add(scanner.nextLine());
+    
+        scanner.close();
+        
+        info.sort((i1, i2) -> {
+            String[] parts1 = i1.split(" ");
+            String[] parts2 = i2.split(" ");
+            int iq1 = Integer.parseInt(parts1[1]); 
+            int iq2 = Integer.parseInt(parts2[1]);
+            return Integer.compare(iq2, iq1); 
+        });
+        
+        for(int i=0;i<3;i++)
+            System.out.println(info.get(i).split(" ")[0]); 
+
+    }
+}
