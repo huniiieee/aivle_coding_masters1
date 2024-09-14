@@ -1,0 +1,66 @@
+문제:
+구간 단속이란, 차량이 도로의 특정 구간을 통과하는데 걸린 시간과 구간의 길이를 이용해 속도위반여부를 판정하는 방법입니다. 
+구간을 통과하는데 걸린 시간은 (차량이 구간 도착점의 카메라에 촬영된 시각 - 차량이 구간 출발점의 카메라에 촬영된 시각) 입니다.
+
+두 카메라가 제공한 로그가 주어질 때 각 차량의 속력을 meter / hour 단위로 출력해주세요.
+
+답안:
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     long distance = scanner.nextLong(); 
+     scanner.nextLine();
+     int num=scanner.nextInt();
+     scanner.nextLine();
+     // List 생성
+     List<Map.Entry<String, String>> start = new ArrayList<>();
+     List<Map.Entry<String, String>> finish = new ArrayList<>();
+     
+     // Map.Entry 객체를 리스트에 추가
+     for(int i=0;i<num;i++)
+     {
+    	 start.add(new AbstractMap.SimpleEntry<>(scanner.next(),scanner.next() ));
+     }
+     for(int i=0;i<num;i++)
+     {
+    	 finish.add(new AbstractMap.SimpleEntry<>(scanner.next(),scanner.next() ));
+     }
+     
+     start.sort(Comparator.comparing(Map.Entry::getKey));
+     finish.sort(Comparator.comparing(Map.Entry::getKey));
+     
+     long []speed= new long[3];
+     for(int i=0;i<num;i++)
+     {
+    	 long start_h=Integer.parseInt(start.get(i).getValue().split(":")[0]);
+    	 long start_m=Integer.parseInt(start.get(i).getValue().split(":")[1]);
+    	 long start_s=Integer.parseInt(start.get(i).getValue().split(":")[2]);
+    	 
+    	 long finish_h=Integer.parseInt(finish.get(i).getValue().split(":")[0]);
+    	 long finish_m=Integer.parseInt(finish.get(i).getValue().split(":")[1]);
+    	 long finish_s=Integer.parseInt(finish.get(i).getValue().split(":")[2]);
+    	 
+    	 long start_time=start_h*3600+start_m*60+ start_s;
+    	 long finish_time=finish_h*3600+finish_m*60+ finish_s;
+    	 
+    	 long taken_time=finish_time - start_time;
+    	 long t=3600;
+    	 speed[i] = t*distance / taken_time;
+    	 System.out.println(start.get(i).getKey()+" "+speed[i]);
+     }
+     
+     
+     
+
+ }
+}
