@@ -1,0 +1,56 @@
+문제:
+대학교 조교인 준하는 과제를 채점하고 있습니다. 
+그런데 채점하던 도중, 다른 학생과 비슷한 답안을 쓴 학생이 있다는 사실을 알게 되었습니다.
+여러가지 조사를 한 준하는 다음과 같은 사실을 알아냈습니다. 
+치팅을 한 과제는 정상적인 답안을 둘로 나누어, 앞과 뒤를 한번씩 더 반복하는 방식으로 쓰여져 있었습니다.
+예를 들어, 정상적인 답안이 ABCD라면, 치팅을 한 과제는 ABABCDCD, AABCDBCD와 같은 방식으로 쓰여져 있습니다.
+어느 학생의 과제 답안이 주어졌을 때, 치팅을 했는지 여부와, 원래 답안을 출력하는 프로그램을 작성해 주세요.
+
+답안:
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     String word = scanner.nextLine(); 
+     
+     int len=word.length()/2;
+     
+     boolean flag=false;
+     String result="";
+     for(int i=0;i<len;i++)
+     {
+    	 int temp1Len=i+1;
+    	 int temp2Len=len-temp1Len;
+    	 String temp1=word.substring(0,i+1);
+    	 String temp2=word.substring(len*2-temp2Len);
+    	 String check1=temp1.concat(temp2);
+    	 String check2=word.substring(i+1,i+1+len);
+    	 if(check1.equals(check2))
+    	 {
+    		 result=check2;
+    		 flag=true;
+    		 break;
+    	 }
+     }
+     
+     if(flag)
+     {
+    	 System.out.println("YES");
+    	 System.out.println(result);
+     }
+     else
+     {
+    	 System.out.println("NO");
+     }
+
+ }
+}
