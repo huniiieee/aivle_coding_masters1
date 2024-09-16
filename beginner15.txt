@@ -1,0 +1,146 @@
+문제:
+오래된 궁전이 세월의 무게를 이기지 못하고 무너지려고 합니다. 관리당국에서는 궁전 곳곳에 기둥을 세우는 보수 공사를 하려고 합니다.
+직사각형 형태의 궁전을 형성하는 모든 가로, 세로 줄에 대해서 적어도 기둥이 하나씩은 존재하도록 만들고자 할 때 세워야 하는 기둥의 최솟값을 출력하세요.
+
+답안:
+import java.io.*;
+
+import java.util.*; 
+
+// don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	public static int check(int[][]map)
+	{
+		int row=map.length;
+		int col=map[0].length;
+		int cnt=0;
+		if(row>col)
+		{
+			
+			for(int i=0;i<col;i++)
+			{
+				if(check_all(map,i,i))
+				{
+					cnt++;
+				}
+			}
+			
+			for(int i=col;i<row;i++)
+			{
+				if(check_row(map,i))
+				{
+					cnt++;
+				}
+			}
+			return cnt;
+		}
+		else if(row<col)
+		{
+		
+			for(int i=0;i<row;i++)
+			{
+				if(check_all(map,i,i))
+				{
+					cnt++;
+				}
+			}
+			
+			for(int i=row;i<col;i++)
+			{
+				if(check_col(map,i))
+				{
+					cnt++;
+				}
+			}
+			return cnt;
+		}
+		else
+		{
+			for(int i=0;i<row;i++)
+			{
+				if(check_all(map,i,i))
+				{
+					cnt++;
+				}
+			}
+			return cnt;
+		}
+	}
+	
+	public static boolean check_all(int[][]map,int row,int col)
+	{
+		int flag=0;
+		int cnt=0;
+		for(int i=0;i<map[0].length;i++)
+		{
+			if(map[row][i] !=1)
+			{
+				flag++;
+				break;
+			}		
+		}
+		
+		for(int i=0;i<map.length;i++)
+		{
+			if(map[i][col] !=1)
+			{
+				flag++;
+				break;
+			}		
+		}
+		
+		if(flag<2)
+			return true;
+		else
+			return false;
+	}
+	public static boolean check_row(int[][]map,int row)
+	{
+		for(int i=0;i<map[0].length;i++)
+		{
+			if(map[row][i] !=1)
+			{
+				return false;
+			}		
+		}
+		return true;
+	}
+	
+	public static boolean check_col(int[][]map,int col)
+	{
+		for(int i=0;i<map.length;i++)
+		{
+			if(map[i][col] !=1)
+			{
+				return false;
+			}		
+		}
+		return true;
+	}
+	
+    public static void main(String[] args) throws IOException { 
+
+        Scanner scanner = new Scanner(System.in); 
+
+        int row = scanner.nextInt(); 
+
+        int col = scanner.nextInt();
+        
+        int [][]map=new int[row][col];
+        for(int i=0;i<row;i++)
+        {
+        	for(int j=0;j<col;j++)
+        	{
+        		map[i][j]=scanner.nextInt();
+        	}
+        }
+        
+       
+        
+
+        System.out.println(check(map)); 
+
+    }
+}

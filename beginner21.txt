@@ -1,0 +1,105 @@
+문제:
+민겸이는 학생들을 가르치는 교사입니다. 
+민겸이는 N명의 학생들을 일렬로 세워 쪽지 시험을 보게 했습니다. 
+쪽지 시험에서 P점 이상을 받은 학생들은 시험에 합격합니다. 
+또한 P점 미만의 학생들 중에서도 좌우로 인접한 P점 이상의 점수를 받은 학생이 한 명 이상이면 그 학생도 합격시키려고 합니다. 
+민겸이가 합격시키고자 하는 학생의 수의 최댓값은 K입니다. 
+K명 이하의 학생이 합격하도록 하면서 가능한 한 많은 학생들이 시험에 합격할 수 있는 P의 최댓값을 구하세요. 
+이때, 시험에 합격하는 학생이 없을 수도 있습니다.
+
+답안:
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+
+public static int numOfPass(int []score,int score1)
+{
+	int [] check= new int[score.length+2];
+	int cnt=0;
+
+	for (int i=1;i<score.length+1;i++)
+	{
+		if(score[i-1]>=score1)
+			check[i]=1;
+		else
+			check[i]=0;
+	}
+	
+	for (int i=1;i<score.length+1;i++)
+	{
+		if(check[i]==1)
+		{
+			if(check[i+1]==0)
+			{
+				check[i-1]=1;
+				check[i+1]=1;
+				i++;
+			}		
+		}
+	}
+
+	for (int i=1;i<score.length+1;i++)
+	{
+		if(check[i]==1)
+			cnt++;
+	}
+	return cnt;
+}
+
+	
+	
+	
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+
+     int pass = scanner.nextInt();
+     
+     int []score = new int[num];
+     for(int i=0;i<num;i++)
+     {
+    	 score[i]=scanner.nextInt();
+     }
+     
+     int min=Arrays.stream(score).sorted().toArray()[0];
+     int max=Arrays.stream(score).sorted().toArray()[num-1];
+     int pre=0;
+     int tmp=0;
+     
+     for(tmp=min;tmp<=max;tmp++)
+     {
+    	 
+    	 int passNum=numOfPass(score,tmp);
+    	 if((pre<=pass)&&(passNum<pre))
+    	 {
+    		 tmp=tmp-1;
+    		 System.out.println(tmp);
+    		 break;
+    	 }
+    	 
+    	 pre=passNum;
+     }
+     tmp=tmp-1;
+   
+    
+     if(tmp==max)
+     {
+    	if(numOfPass(score,tmp)>pass)
+            System.out.println(min-1);
+        else
+        	System.out.println(tmp);	
+     }      
+     
+ }
+     
+
+}

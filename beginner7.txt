@@ -1,0 +1,61 @@
+문제:
+누적 합 트리란 각 원소가 2개씩 누적되어 합해지는 형태를 가진 트리를 의미합니다. 
+승훈이는 이진 트리 자료구조를 공부하다가 누적 합을 가지는 이진 트리를 만들어보고 싶다는 생각을 했습니다. 
+하지만 자료구조를 3번이나 재수강 했지만 모두 C+을 받은 승훈이는 스스로 이러한 프로그램을 작성할 능력이 없습니다.
+
+그러므로 우리가 승훈이를 대신하여 주어진 원소로 누적 합 이진 트리를 만드는 프로그램을 작성해봅시다.
+
+답안:
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt();
+     int height=num;
+     int []power2= {1,2,4,8,16,32,64,128,256,512,1024,2048,4096};
+     
+     for(int i=0;i<13;i++)
+     {
+    	 if(height<=power2[i])
+    	 {
+    		 height=i;
+    		 break;
+    	 }
+     }
+     
+     
+     int [][]dp=new int[height+1][power2[height]];
+     for(int i=0;i<num;i++)
+     {
+    	 dp[0][i]=scanner.nextInt();
+     }
+     
+     for(int i=1;i<=height;i++)
+     {
+    	 for(int j=0;j<power2[height-i];j++)
+    	 {
+    		 dp[i][j]=dp[i-1][j*2]+dp[i-1][j*2+1];
+    	 }
+     }
+     
+     for(int i=height;i>=0;i--)
+     {
+    	 for(int j=0;j<power2[height-i];j++)
+    	 {
+    		 System.out.print(dp[i][j]+" ");
+    	 }
+    	 System.out.println();
+     }
+     
+
+ }
+}
