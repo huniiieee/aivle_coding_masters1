@@ -1,11 +1,32 @@
 문제:
-농부 민겸이는 밭에서 농사를 짓습니다.
-민겸이의 밭은 N × N 크기의 정사각형 모양입니다. 즉, N^2개의 1 × 1 크기의 땅으로 나눌 수 있습니다. 
-각 땅은 빈 땅, 작물만 있는 땅, 잡초만 있는 땅으로 구분됩니다. 
-민겸이는 잡초를 손쉽게 제거하기 위해 최첨단 오리 농법을 도입했습니다.
-오리 인덕이는 식탐이 많기 때문에 민겸이가 정한 어떤 가로줄 또는 세로줄의 잡초와 작물을 모두 먹습니다.
- 인덕이가 먹을 수 있는 양에 한계는 없고, 민겸이는 인덕이를 원하는 만큼 이용할 수 있습니다.
-똑똑한 민겸이는 인덕이를 적절히 이용하여 모든 작물을 보존하면서 최대한 많은 잡초를 없앴습니다. 이때 잡초만 있는 땅이 몇 개 남아있는지 알아봅시다.
+파스칼 피라미드는 파스칼의 삼각형을 3차원으로 확장한 개념으로 정수가 나열된 사면체의 모양을 하고 있습니다. 논의를 간단하게 하기 위해 밑면이 직각이등변삼각형인 삼각뿔 모양이라고 가정하겠습니다. 
+파스칼 피라미드를 만드는 방법은 다음과 같습니다.
+
+1. 먼저 삼각뿔 맨꼭대기(1층)에 1행 1열에 1을 써넣습니다. 
+2. 그 아래층의 i행 j열에는 바로 윗층 i행 j열, i-1행 j열, i행 j-1열의 요소들을 더한 값을 써넣습니다. 만약 윗층에 해당 요소가 없다면 0으로 간주합니다. 
+
+파스칼 피라미드의 각 층을 분리해서 4층까지 표현하면 다음과 같습니다. 
+
+<1층>
+1
+
+<2층>
+1 1
+1
+
+<3층>
+1 2 1
+2 2
+1
+
+<4층>
+1 3 3 1
+3 6 3
+3 3
+1
+
+정수 n이 입력될 때, 파스칼 피라미드 n층을 출력하는 프로그램을 작성해봅시다.
+
 
 답안:
 //don't place package name. 
@@ -21,59 +42,37 @@ public class Main {
 
      Scanner scanner = new Scanner(System.in); 
 
-     int n = scanner.nextInt(); 
+     int floor = scanner.nextInt(); 
 
-     scanner.nextLine();
-     int [][] map= new int[n][n];
-     int cnt=0;
-     for(int i=0;i<n;i++)
+     int [][]dp=new int[floor+2][floor+2];
+     int [][]temp=new int[floor+2][floor+2];
+     
+     temp[1][1]=1;
+     dp[1][1]=1;
+     for(int i=1;i<floor;i++)
      {
-    	 for(int j=0;j<n;j++)
-    	 {
-    		 map[i][j]=scanner.nextInt();
-    		 if (map[i][j]==2)
-    			 cnt++;
-    	 }
-     }
 
-     for (int i=0;i<n;i++)
-     {
-    	 for(int j=0;j<n;j++)
+    	 for(int j=1;j<i+2;j++)
     	 {
-    		 if (map[i][j]==2)
+    		 for(int k=1;j+k<=i+2;k++)
     		 {
-    			 if(check(i,j,map))
-    				 cnt--;
-    				 
+    			 dp[j][k]=temp[j][k]+temp[j-1][k]+temp[j][k-1];
     		 }
     	 }
+    	 for (int q = 0; q < floor + 2; q++) {
+    		    for (int j = 0; j < floor + 2; j++) {
+    		        temp[q][j] = dp[q][j];
+    		    }
+    	}
      }
      
-     System.out.println(cnt);
-     
- }
- static private boolean check(int r,int c, int[][]map)
- {
-	int flag=0;
-	for(int i=0;i<map[0].length;i++)
-	{
-		if(map[r][i]==1)
-		{
-			flag+=1;
-			break;
-		}
-	}
-	for(int i=0;i<map[0].length;i++)
-	{
-		if(map[i][c]==1)
-		{
-			flag+=1;
-			break;
-		}
-	}
-	if(flag==2)
-		return false;
-	else
-		return true;
+     for(int i=1;i<floor+1;i++)
+     {
+    	 for(int j=1;j+i<=floor+1;j++)
+    	 {
+    		 System.out.print(dp[i][j]+" ");
+    	 }
+    	 System.out.println();
+     }
  }
 }

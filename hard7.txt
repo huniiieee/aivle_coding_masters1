@@ -1,0 +1,87 @@
+문제:
+탈옥수가 자꾸 발생하는 교도소에 새 소장이 부임했습니다. 소장은 서로 친한 두 죄수가 탈옥 모의를 하는 것을 보았습니다. 
+소장은 교도소를 두 구역으로 나누고 죄수들을 잘 배치하여, 어떤 죄수에게도 자신과 같은 구역에 친한 죄수가 없게 하려고 합니다. 
+서로 친한 죄수의 쌍이 주어지면, 소장이 목표를 달성할 수 있는지 알려주세요.
+
+답안:
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	static int [][]graph;
+	static int [] check;
+	
+	
+	
+	static boolean result(int num) {
+		for(int i=1;i<=num;i++)
+		{
+			if(check[i]==-1)
+			{
+				if(!bfs(i,num))
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	
+	
+	static boolean bfs(int start,int num)
+	{
+		check[start]=0;
+		Queue<Integer> q=new LinkedList<>();
+		q.offer(start);
+		while(!q.isEmpty())
+		{
+			int node=q.poll();
+			for(int i=1;i<=num;i++)
+			{
+				if(graph[node][i]==1)
+				{
+					if(check[i]==-1)
+					{
+						check[i]=1-check[node];
+						q.offer(i);
+					}
+					else if(check[i]==check[node])
+					{
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+  
+     int num = scanner.nextInt(); 
+
+     int pair = scanner.nextInt(); 
+     graph =new int[num+1][num+1];
+     check=new int[num+1];
+     for(int i=0;i<pair;i++)
+     {
+    	 int temp1= scanner.nextInt(); 
+    	 int temp2= scanner.nextInt(); 
+    	 graph[temp1][temp2]=1;
+    	 graph[temp2][temp1]=1;
+     }
+     
+     Arrays.fill(check, -1);
+     if(result(num))	 
+    	 System.out.println(1);
+     else
+    	 System.out.println(0);
+
+ }
+}

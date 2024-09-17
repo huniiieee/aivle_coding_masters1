@@ -1,0 +1,71 @@
+문제:
+토요일 오후에 심심한 동빈이는 혼자 숫자 맞추기 게임을 하는 중입니다. 
+숫자 맞추기 게임이란, 시작 숫자에서 1을 더하거나, 1을 빼거나, 2를 곱하는 과정을 반복하여 목표 숫자에 가장 빠른 방법으로 도달하도록 하는 게임입니다.
+
+예를 들어 목표 숫자를 8로 잡고, 시작 숫자를 6으로 정했다면 6에 1을 두 번 더하는 방법으로 목표에 도달하는 것이 가장 빠른 방법입니다. 
+이때 목표에 도달하기 위한 최소 횟수는 2번입니다.
+
+목표 숫자와 시작 숫자가 주어졌을 때 동빈이가 숫자 맞추기 게임을 가장 빨리 끝낼 수 있는 횟수를 구하는 프로그램을 작성하세요.
+
+추가적인 예시로 목표 숫자가 500이고, 시작 숫자가 30이라면 (30, 31, 62, 124, 125, 250, 500)의 순서대로 6번만에 도달할 수 있습니다.
+
+답안:
+
+import java.io.*;
+
+import java.util.*; 
+
+// don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	static boolean[] visited=new boolean[200001];
+	static int[] cnt=new int[200001];
+	static int target;
+	
+	static void bfs(int start)
+	{
+		Queue<Integer> q=new LinkedList<>();
+		q.offer(start);
+	
+		visited[start]=true;
+	
+		while(!q.isEmpty())
+		{
+			int a=q.poll();
+			if(((a+1)<200001)&&(!visited[a+1]))
+			{
+				visited[a+1]=true;
+				cnt[a+1]=cnt[a]+1;
+				q.offer(a+1);
+			}
+			if(((a-1)>=0)&&(!visited[a-1]))
+			{
+				visited[a-1]=true;
+				cnt[a-1]=cnt[a]+1;
+				q.offer(a-1);
+			}
+			if(((a*2)<200001)&&(!visited[a*2])) 
+			{
+				visited[a*2]=true;
+				cnt[a*2]=cnt[a]+1;
+				q.offer(a*2);
+			}
+		}
+	}
+    public static void main(String[] args) throws IOException { 
+
+        Scanner scanner = new Scanner(System.in); 
+
+        
+        int tar = scanner.nextInt(); 
+        
+        int start = scanner.nextInt(); 
+        target=tar;
+        
+        bfs(start);
+        	
+        System.out.println(cnt[target]); 
+
+    }
+}

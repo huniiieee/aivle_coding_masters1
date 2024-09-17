@@ -1,0 +1,80 @@
+문제:
+태국의 한 도시로 출장을 온 민혁이는 택시를 타고 모든 마을을 방문하려 합니다. 이 도시의 택시 체계는 특이합니다. 
+각 택시는 어떤 두 마을 사이만 운행하므로, 어떤 택시를 타고 하나의 마을에서 출발해 다른 마을에 도착했다면 다른 택시로 갈아타야 합니다. 
+타고 싶은 택시들은 모두 전날에 선불로 요금을 내고 예약해야 합니다. 예약한 택시는 몇 번을 타더라도 추가비용 없이 자유롭게 이용할 수 있습니다.
+
+도시에 N개의 마을과 M대의 택시가 있을 때, 택시만으로 모든 마을을 방문하려면 택시 예약에 적어도 얼마가 드는지 출력하는 프로그램을 작성하세요. 
+
+답안:dfs(재귀)
+// don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+// don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	static List<Integer>money=new ArrayList<>();
+	static int[][]graph;
+	static int Size;
+	static int[]visited;
+	static int check;
+	
+	public static void dfs(int start,int pre,int cnt,int sum,int bill)
+	{
+		if(cnt==Size-2)
+		{
+			if(sum==check)
+			{
+				money.add(bill);
+				return;
+			}
+			else
+				return;
+		}
+		
+		
+		for(int i=1;i<Size;i++)
+		{
+			if((graph[start][i]!=0)&&(i!=pre))
+			{	
+				visited[start]=1;
+				visited[i]=1;
+				dfs(i,start,cnt+1,sum+i,bill+graph[start][i]);
+			}
+		}
+	}
+	
+    public static void main(String[] args) throws IOException { 
+
+        Scanner scanner = new Scanner(System.in); 
+
+        int n = scanner.nextInt(); 
+
+        int num = scanner.nextInt();
+        Size=n+1;
+        graph=new int[Size][Size];
+        visited=new int[Size];
+        check=n*(n+1)/2;
+        
+        for(int i=0;i<num;i++)
+        {
+        	int start=scanner.nextInt();
+        	int finish=scanner.nextInt();
+        	int bill=scanner.nextInt();
+        	graph[start][finish]=bill;
+        	graph[finish][start]=bill;
+        }
+        
+        
+    
+        dfs(1,1,0,1,0);
+        dfs(2,2,0,2,0);
+    
+      	
+        System.out.println(Collections.min(money));
+
+    }
+}
