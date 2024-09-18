@@ -1,0 +1,62 @@
+문제:
+프로야구 최고령 선수 정우성은 올해 통산 타율 신기록에 도전합니다. 
+시즌은 현재 진행중이고, 그의 타율은 역대 최고 타율 기록과 동률입니다. 
+정우성 선수가 앞으로의 타석에서 충분히 많은 안타를 치면 타율이 올라 신기록을 세울 수 있고, 그렇지 못하면 신기록을 세우지 못할 수도 있습니다.
+
+정우성 선수는 신비한 마법을 통해 이제 타석에 나가기만 하면 반드시 안타를 칩니다. 대신 마법의 저주로 타석에 최대 1,000,000,000번까지만 나갈 수 있습니다.
+ 정우성 선수가 현재까지 타석에 들어선 횟수와 안타를 친 횟수가 주어지면, 앞으로 타석에 몇 번 나가야 타율이 오르는지 출력하는 프로그램을 작성하세요.
+ 단, 타율은 통상적으로 야구 경기에서 생각하는 할, 푼 까지만 계산하고 리 단위는 버립니다. 예를 들어 타율이 0.325, 즉 3할 2푼 5리일 경우 3할 2푼으로 생각합니다.
+
+ 답안:
+ 
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int total = scanner.nextInt(); 
+
+     int hit = scanner.nextInt(); 
+     BigDecimal t=new BigDecimal(String.valueOf(total));
+     BigDecimal h=new BigDecimal(String.valueOf(hit));
+     BigDecimal standard=h.divide(t, 2, RoundingMode.FLOOR);
+     BigDecimal one = new BigDecimal("1");
+     
+     BigDecimal target=standard.add(new BigDecimal("0.01"));
+     int low=0;
+     int high=1000000000;
+     int result=0;
+     int mid=0;
+     
+     while(low<=high)
+     {
+    	 mid=(low+high)/2;
+    	 BigDecimal temp=h.add(new BigDecimal(mid)).divide(t.add(new BigDecimal(mid)), 2, RoundingMode.FLOOR);
+    	 if(temp.compareTo(target)>=0)
+    	 {
+    		 high=mid-1;
+    		 result=mid;
+    	 }
+    	 else
+    	 {
+    		 low=mid+1;
+    	 }
+     }
+     
+     if(result==0)
+    	 System.out.println(-1);
+     else
+    	 System.out.println(result);
+    
+
+ }
+}

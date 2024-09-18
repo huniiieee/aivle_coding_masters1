@@ -1,0 +1,56 @@
+문제:
+은진이네 수족관에는 여러 마리의 상어가 일렬로 늘어서 있습니다. 또한 상어마다 크기가 정해져 있습니다. 
+뒤에 있는 상어가 앞에 있는 상어보다 크기가 크다면 뒤에 있는 상어가 앞에 있는 상어를 삼킬 수 있습니다.
+
+예를 들어 상어의 크기가 순서대로 (3, 5, 1, 2, 3, 8)이라면 크기가 3인 상어를 5인 상어가 먹고, 5인 상어를 8인 상어가 먹을 수 있습니다. 
+이 때 연속적으로 먹히는 관계에 포함되는 상어는 총 3마리가 됩니다.
+
+반면에 크기가 1인 상어를 2인 상어가 먹고, 크기가 2인 상어를 3인 상어가 먹고, 
+크기가 3인 상어를 8인 상어가 먹는다면 연속적으로 먹히는 관계에 포함되는 상어는 총 4마리가 됩니다.
+
+상어들의 크기가 주어졌을 때 연속적으로 먹히는 관계를 가진 상어들의 최대 마리 수를 구하는 프로그램을 작성하세요.
+
+답안:
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+
+     int []shark=new int[num];
+     int []dp=new int[num];
+    
+     
+     scanner.nextLine();
+     
+     for(int i=0;i<num;i++)
+     {
+    	 shark[i]=scanner.nextInt();
+    	 dp[i]=1;
+     }
+     
+     
+     for(int i=1;i<num;i++)
+     {
+    	 for(int j=0;j<i;j++)
+    	 {
+    		 if(shark[i]>shark[j])
+    		 {
+    			 dp[i]=Integer.max(dp[i],dp[j]+1);
+    		 }
+    	 }
+     }
+     
+     int max=Arrays.stream(dp).max().orElse(1);
+     System.out.println(max); 
+
+ }
+}
