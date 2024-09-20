@@ -1,0 +1,85 @@
+문제:
+수민이는 저녁 약속을 위해 차를 타고 식당을 가던 중, 차가 고장나서 남은 거리를 일직선으로 걸어가기로 했습니다. 
+수민이의 몸은 굉장히 특이하기 때문에 1km 걸을때마다 포만감이 1씩 떨어집니다. 포만감이 0이 되면 그는 더 이상 움직일 수 없습니다.
+ 다행히도 식당까지 걸어가는 길에 편의점들이 많이 있어 필요하면 들려서 포만감을 올릴 수 있습니다. 
+ 그는 대식가이기 때문에 필요하면 얼마든지 많이 먹을 수 있어 포만감을 올리는데 제한이 없습니다.
+
+수민이는 식당에 최대한 빨리 가야 하기 때문에 중간에 편의점에 들르는 횟수는 최소화하려고 합니다.
+ 편의점의 위치, 각 편의점에서 얻을 수 있는 포만감이 주어질 때, 편의점에 들르는 횟수를 구하는 프로그램을 만드세요.
+
+ 답안:
+ 
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ 
+ static int check(int []store,int target,int startFull)
+ {
+	 List<Integer> list = new ArrayList<>();
+	 int cnt=0;
+	 int full=startFull;
+	 int walk=0;
+	 while(true)
+	 {
+		 walk++;
+		 full--;
+		 
+		 if(walk==target)
+			 return cnt;
+		 
+		 if(store[walk]!=0)
+		 {
+			 list.add(store[walk]);
+		 }
+		 
+		 if(full==0)
+		 {
+			 if(list.isEmpty())
+			 {
+				 break;
+			 }
+			 else
+			 {
+				 int max=Collections.max(list);
+				 full +=max;
+				 list.remove(Integer.valueOf(max));
+				 cnt++;
+			 }
+		 }
+			 
+	 }
+	 return -1;
+ }
+ 
+ 
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     int []store=new int[1500];
+     
+     int distance=0;
+     int full=0;
+     for(int i=0;i<num;i++)
+     {
+         distance=scanner.nextInt();
+         full=scanner.nextInt(); 
+         store[distance]=full;
+     }
+     
+     int target=scanner.nextInt();
+     int startFull=scanner.nextInt();
+     
+     check(store,target,startFull);
+     System.out.println(check(store,target,startFull)); 
+
+ }
+}
