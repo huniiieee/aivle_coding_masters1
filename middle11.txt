@@ -1,0 +1,110 @@
+문제: (다익스트라 알고리즘)
+떡장사를 마치고 집에 가는 아낙네에게는 집에서 엄마를 애타게 기다리는 사랑스러운 오누이가 있습니다. 
+집에 가는 길은 N행 N열, 총 N × N 칸의 격자로 나뉘며, 모든 칸에는 호랑이가 한 마리씩 살고 있습니다. 
+이 호랑이들은 떡을 매우 좋아하여 떡 몇 개 주면 안 잡아먹지!라며 위협을 합니다.
+
+
+제일 왼쪽 위 1행 1열의 칸에 서 있는 아낙네는 제일 오른쪽 아래 N행 N열의 칸에 있는 집으로 돌아가야 합니다. 
+아낙네는 상하좌우 중 한 방향으로 인접한 칸으로만 이동할 수 있으며, 길 밖으로 나가는 것은 불가능합니다. 
+집에 가는 길에 만나는 모든 호랑이에게 반드시 원하는 만큼의 떡을 줘야 하며, 이는 1행 1열의 호랑이와 N행 N열의 호랑이를 포함합니다. 
+아낙네가 집으로 돌아가려면 최소 몇 개의 떡이 필요한지 출력하는 프로그램을 작성하세요.
+
+답안:
+package Chapter2;
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+
+	static class Node implements Comparable<Node>{
+		int x,y,cost;
+		
+		Node(int x,int y,int cost)
+		{
+			this.x=x;
+			this.y=y;
+			this.cost=cost;
+		}
+		
+		public int compareTo(Node o) {
+			return this.cost-o.cost;
+		}
+	}
+	
+	static int dijkstra(int [][]map,int n)
+	{
+		boolean [][] visited = new boolean[n][n];
+	    int [][] dp=new int[n][n];
+	    
+	    for(int []row : dp)
+	    	Arrays.fill(row, Integer.MAX_VALUE);
+	    
+	    int []dx = {1,0,-1,0};
+	    int []dy = {0,1,0,-1};
+	    
+	    dp[0][0]=map[0][0];
+	    PriorityQueue<Node> q= new PriorityQueue<>();
+	    q.offer(new Node(0,0,dp[0][0]));
+	    visited[0][0]=true;
+	    while(!q.isEmpty())
+	    {
+	    	Node temp=q.poll();
+	    	int x=temp.x;
+	    	int y=temp.y;
+	    	int cost=temp.cost;
+	    		
+	    	if((x==n-1)&&(y==n-1))
+	    	{
+	    		return cost;
+	    	}
+	    	
+	    	for(int i=0;i<4;i++)
+	    	{
+	    		int nx=x+dx[i];
+	    		int ny=y+dy[i];
+	    		
+	    		if(nx>=0 && nx<n && ny>=0 && ny<n && !visited[nx][ny])
+	    		{
+	    			int newCost=cost+map[nx][ny];
+	    			visited[nx][ny]=true;
+	    			dp[nx][ny]=newCost;
+	    			q.offer(new Node(nx,ny,newCost));
+	    		}
+	    	}
+	    	
+	    }
+	    return -1;	
+	}
+	
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     int [][] map=new int[num][num];
+     
+   
+     
+     for(int i=0;i<num;i++)
+     {
+    	 for(int j=0;j<num;j++)
+    	 {
+    		 map[i][j]=scanner.nextInt();
+    	 }
+     }
+     
+   
+ 
+     
+    
+     System.out.println(dijkstra(map,num)); 
+
+ }
+}

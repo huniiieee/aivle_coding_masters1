@@ -1,0 +1,106 @@
+문제:
+철수는 카페 사장입니다. 철수가 운영하는 카페는 최대 N명까지 동시에 수용할 수 있습니다.
+
+오늘 하루동안 M명의 손님이 철수의 카페를 방문하려고 합니다. 어떤 손님이 카페에 입장하려고 할 때 이미 카페의 수용 인원이 가득 찬 경우, 
+해당 손님은 카페를 이용하지 않고 발을 돌립니다. 단, 어떤 손님이 카페에서 나가는 것과 동시에 다른 손님이 카페에 입장할 수 있습니다.
+
+손님들의 카페 방문 계획 주어질 때 00:00:00부터 23:59:59까지 하루동안 철수의 카페를 이용하는 손님이 몇 명인지 구하는 프로그램을 작성해주세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*;
+import java.util.stream.Collectors; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+		static class Person{
+			int in,out;
+			Person(int in,int out)
+			{
+				this.in=in;
+				this.out=out;
+			}
+			
+			 public boolean equals(Object obj) {
+			        if (this == obj) return true;
+			        if (obj == null || getClass() != obj.getClass()) return false;
+			        Person other = (Person) obj;
+			        return this.in==other.in && this.out==other.out;
+			    }
+			 
+			 public int hashCode() {
+			        return Objects.hash(in,out);
+			    }
+			 
+			 public int getin() {
+			        return in;
+			    }
+
+			    public int getout() {
+			        return out;
+			    }
+		}
+
+public static void main(String[] args) throws IOException { 
+	
+     Scanner scanner = new Scanner(System.in); 
+     int finish=23*3600+59*60+59;
+     int max = scanner.nextInt(); 
+
+     int num = scanner.nextInt();
+     
+     scanner.nextLine();
+     List <Person> list=new ArrayList<>();
+     for(int i=0;i<num;i++)
+     {
+    	 String temp=scanner.nextLine();
+    	 String [] tempSplit1=temp.split(" ")[0].split(":");
+    	 String [] tempSplit2=temp.split(" ")[1].split(":");
+    	 int in=Integer.valueOf(tempSplit1[0])*3600 + Integer.valueOf(tempSplit1[1])*60 +Integer.valueOf(tempSplit1[2]);
+    	 int out=Integer.valueOf(tempSplit2[0])*3600 + Integer.valueOf(tempSplit2[1])*60 +Integer.valueOf(tempSplit2[2]);
+    	 
+    	 list.add(new Person(in,out));
+     }
+     
+     Collections.sort(list,Comparator.comparing(x->x.in));
+     
+     List <Person> cafe=new ArrayList<>();
+     int cnt=0;
+     int cur=0;
+     for(int i=list.get(0).in;i<=finish;i++)
+     {
+    	 int temp=i;
+    	 if(cafe.removeIf(s->s.getout()==temp))
+    		 cur--;
+    	 
+    	 if(list.stream().anyMatch(s->s.getin()==temp))
+    	 {
+    		 if(cur==max)
+    			 list.removeIf(s->s.getin()==temp);
+    		 else
+    		 {
+    			 List<Person> tmp = list.stream()
+     		            .filter(s -> s.getin() == temp)
+     		            .collect(Collectors.toList());
+    			
+    			for(Person p :tmp)
+    			{
+    				if(cur==max)
+    	    			 list.remove(p);
+    				cafe.add(p);
+    				cur++;
+    				cnt++;
+    			}
+    		 }
+    	 }
+    	 
+     }
+     System.out.println(cnt);
+
+ }
+}

@@ -1,0 +1,158 @@
+문제:
+어린이 또리는 그래프를 너무나도 사랑합니다. 특히 아름답다고 생각하는 그래프도 있어서, 그 그래프를 그려서 벽에 붙여놓기까지 했습니다. 
+하지만 어린이 또리에겐 그래프는 너무 비싸서 용돈을 모아서는 영원히 살 수 없습니다.
+또리의 아버지는 크리스마스 선물로 또리에게 그래프를 사주려고 합니다. 특히 또리가 벽에 붙여놓은 그래프와 같은 그래프를 사주면 기뻐할 것입니다.
+
+그래프 상점에 온 또리의 아버지는 수많은 그래프들이 놓여있는 것을 보았습니다. 
+이 그래프들 중 하나와 또리가 벽에 붙여놓은 그래프가 주어질 때 두 그래프가 같은 그래프인지 출력하세요.
+한 그래프의 정점 번호를 적절히 바꾸었을 때 두 그래프의 정점의 집합과 간선의 집합이 서로 같다면, 두 그래프는 같은 그래프입니다.
+
+
+답안:
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	static class Graph {
+        private final List<List<Integer>> adjList;
+        private final int numVertices;
+
+        public Graph(int numVertices) {
+            this.numVertices = numVertices;
+            this.adjList = new ArrayList<>();
+            for (int i = 0; i < numVertices; i++) {
+                adjList.add(new ArrayList<>());
+            }
+        }
+
+        // 간선을 추가하는 함수
+        public void addEdge(int u, int v) {
+            adjList.get(u).add(v);
+            adjList.get(v).add(u);
+        }
+
+        // 그래프의 정점 개수 반환
+        public int getNumVertices() {
+            return numVertices;
+        }
+
+        // 주어진 정점에서 인접한 정점 리스트 반환
+        public List<Integer> getNeighbors(int v) {
+            return adjList.get(v);
+        }
+    }
+
+    // 두 그래프가 동형인지 확인하는 함수
+    public static boolean isIsomorphic(Graph g1, Graph g2) {
+        if (g1.getNumVertices() != g2.getNumVertices()) {
+            return false; // 정점 개수가 다르면 동형이 될 수 없음
+        }
+
+        // 백트래킹을 위한 매핑 배열
+        int[] mapping = new int[g1.getNumVertices()];
+        Arrays.fill(mapping, -1);
+
+        // 백트래킹을 사용하여 두 그래프의 정점 매핑을 찾음
+        return vf2Backtrack(g1, g2, mapping, 0);
+    }
+
+    // 백트래킹 함수 (VF2 알고리즘 핵심)
+    private static boolean vf2Backtrack(Graph g1, Graph g2, int[] mapping, int depth) {
+        if (depth == g1.getNumVertices()) {
+            return true; // 모든 정점을 성공적으로 매핑함
+        }
+
+        for (int v1 = 0; v1 < g1.getNumVertices(); v1++) {
+            if (mapping[v1] == -1) {
+                for (int v2 = 0; v2 < g2.getNumVertices(); v2++) {
+                    if (!isMapped(v2, mapping)) {
+                        // 매핑 가능성 확인
+                        if (areCompatible(g1, g2, v1, v2, mapping)) {
+                            mapping[v1] = v2; // 매핑
+                            if (vf2Backtrack(g1, g2, mapping, depth + 1)) {
+                                return true;
+                            }
+                            mapping[v1] = -1; // 백트래킹
+                        }
+                    }
+                }
+                return false; // 매핑 실패
+            }
+        }
+        return false;
+    }
+
+    // 이미 매핑된 정점인지 확인하는 함수
+    private static boolean isMapped(int v2, int[] mapping) {
+        for (int m : mapping) {
+            if (m == v2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 두 정점이 매핑 가능한지 확인하는 함수
+    private static boolean areCompatible(Graph g1, Graph g2, int v1, int v2, int[] mapping) {
+        
+        
+        List<Integer> neighbors1 = g1.getNeighbors(v1);
+        List<Integer> neighbors2 = g2.getNeighbors(v2);
+
+        // 인접한 정점들이 이미 매핑된 경우, 이웃 정점도 매핑 가능해야 함
+        for (int i = 0; i < neighbors1.size(); i++) {
+            int neighbor1 = neighbors1.get(i);
+            if (mapping[neighbor1] != -1) {
+                if (!neighbors2.contains(mapping[neighbor1])) {
+                    return false; // 인접한 정점이 매핑될 수 없음
+                }
+            }
+        }
+        return true; // 매핑 가능
+    }
+	
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+     
+     int nodeNum=scanner.nextInt();
+     int edgeNum=scanner.nextInt();
+     
+     
+     Graph graph1 = new Graph(nodeNum);
+     for(int i=0;i<edgeNum;i++)
+     {
+    	 graph1.addEdge(scanner.nextInt()-1,scanner.nextInt()-1);
+     }
+     
+     nodeNum=scanner.nextInt();
+     edgeNum=scanner.nextInt();
+     
+     Graph graph2 = new Graph(nodeNum);
+     for(int i=0;i<edgeNum;i++)
+     {
+    	 graph2.addEdge(scanner.nextInt()-1,scanner.nextInt()-1);
+     }
+     // 두 번째 그래프 (4개의 정점)
+     
+   
+
+     // 그래프 동형성 검사
+     if (isIsomorphic(graph1, graph2)) {
+         System.out.println("YES");
+     } else {
+         System.out.println("NO");
+     }
+     
+     
+     
+     
+
+ }
+}
