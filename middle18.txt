@@ -1,0 +1,114 @@
+문제:
+콘웨이의 생명 게임이란 격자판의 셀 각각에 위치한 세포의 변화를 관찰하는 게임입니다.
+세포는 한 세대가 지나면 죽거나 살아나게 되는데 인접한 칸의 상황에 따라 양상이 달라집니다.
+이때 어떤 칸의 인접한 칸이란 다음과 같습니다. 
+편의상 어떤 칸이 격자판의 r행, c열에 위치할 때 이를 (r, c) 로 나타냅시다. 그러면 그 격자칸 (r, c)의 인접한 칸은 다음 8칸을 의미합니다.
+(r-1, c-1), (r-1, c), (r-1, c+1), (r, c-1), (r, c+1), (r+1, c-1), (r+1, c), (r+1, c+1) 
+
+한편, 한 세대가 지날 때 세포의 변화양상은 다음과 같습니다.
+i) 어떤 세포가 살아있는 상태일 때
+인접한 칸 중 살아있는 세포가 2개 이거나 3개면 그 세포는 다음 세대에도 생존합니다.
+그 외의 경우는 다음 세대에 죽습니다.
+
+ii) 어떤 세포가 죽어있는 상태일 때
+인접한 칸 중 살아있는 세포가 3개일 경우만 다음 세대에 그 세포가 살아납니다.
+그 외의 경우는 다음 세대에도 여전히 죽어있는 상태입니다.
+
+5 x 5 의 콘웨이의 생명게임의 초기상태가 주어질 때 N번째 세대를 출력하세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ static int []dx= {-1,-1,-1,0,0,1,1,1};
+ static int []dy= {-1,0,1,-1,1,-1,0,1};
+ 
+ 
+ 	static void check(int[][]temp,int[][]map,int r,int c)
+ 	{
+ 		int cnt=0;
+ 		for(int i=0;i<8;i++)
+ 		{
+ 			int nr= r+dx[i];
+ 			int nc= c+dy[i];
+ 			if(nr>=0&&nr<5&&nc>=0&&nc<5)
+ 			{
+ 				cnt +=map[nr][nc];
+ 			}
+ 		}
+ 		if(map[r][c]==0 && cnt==3)
+ 		{
+ 			temp[r][c]=1;
+ 		}
+ 		else if(map[r][c]==1 && cnt==2)
+ 		{
+ 			temp[r][c]=1;
+ 		}
+ 		else if(map[r][c]==1 && cnt==3)
+ 		{
+ 			temp[r][c]=1;
+ 		}
+ 		else
+ 			temp[r][c]=0;
+ 		
+ 	}
+ 	static void result(int [][]map,int [][]temp,int N)
+ 	{
+ 		for(int i=0;i<N;i++)
+ 		{
+ 			for(int j=0;j<5;j++)
+ 			{
+ 				for(int k=0;k<5;k++)
+ 				{
+ 					if(i%2==0)
+ 					{
+ 						check(temp,map,j,k);
+ 					}
+ 					else
+ 					{
+ 						check(map,temp,j,k);
+ 					}
+ 				}
+ 			}
+ 		}
+ 	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     scanner.nextLine();
+     int [][]map=new int[5][5];
+     for(int i=0;i<5;i++)
+     {
+    	 String temp=scanner.nextLine();
+    	 char []tmp=temp.toCharArray();
+    	 for(int j=0;j<5;j++)
+    	 {
+    		 map[i][j]=Integer.parseInt(String.valueOf(tmp[j]));
+    	 }
+     }
+
+     int [][]temp=new int[5][5];
+     
+     result(map,temp,num);
+     
+     for(int i=0;i<5;i++)
+	 {
+		 for(int j=0;j<5;j++)
+		 {
+			 System.out.print(num%2==1 ? temp[i][j] : map[i][j]);
+		 }
+		 System.out.println();
+	 }
+    
+
+ }
+}
