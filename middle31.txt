@@ -1,0 +1,63 @@
+문제:
+어떤 수가 그 수의 부분 수로 나누어 떨어지면 이 수를 예쁜 수라고 합니다.
+부분 수란, 수의 맨앞과 맨뒤에서 총 1개 이상의 숫자를 떼어내어 만든 수를 말합니다.
+예를 들어, 13은 11349의 부분 수이고, 11349는 13으로 나누어 떨어지므로 예쁜 수입니다.
+어떤 수가 주어지면, 이 수가 예쁜 수인지 여부를 출력하는 프로그램을 작성해 주세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+import java.util.*;
+
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     
+     if(num<100)
+     {
+    	 System.out.println("NO");
+    	 return;
+     }
+    	 
+     String numS=String.valueOf(num);
+     String temp1 = numS.substring(0, numS.length() - 1);
+     String temp2 = numS.substring(1, numS.length());
+     int max=Integer.max(Integer.parseInt(temp1),Integer.parseInt(temp2));
+     
+     boolean flag=false;
+     for(int i=1;i<num;i++)
+     {
+    	 
+    	 if(num%i==0)
+    	 {
+    		 String temp=String.valueOf(i);
+    		 if(numS.contains(temp))
+    		 {
+    			 
+    			 flag=true;
+    			 break;
+    		 }
+    	 }
+     }
+    
+     
+     if(flag)
+     {
+    	 System.out.println("YES");
+     }
+     else
+    	 System.out.println("NO");
+
+
+ }
+}
