@@ -1,0 +1,79 @@
+문제:
+오디세우스와 일행들은 마침내 고국에 돌아올 수 있게 되었습니다. 
+하지만 마지막 관문인 바위굴을 통과해야 합니다. 드넓은 바다에 바위굴들이 있는데 각 바위굴의 구멍으로 오디세우스가 탄 배가 통과할 수 있고, 
+각 바위굴들마다 제한시간을 넘기면 소용돌이가 생겨 배가 추락합니다. 단, 오디세우스는 각 바위굴을 통과할때 같은 속도로 지나가는게 안전하다 판단하였습니다.
+  바위굴들에 대한 정보가 주어졌을 때, 오디세우스가 각 바위굴들을 지나가는 시간을 최대 몇으로 정해야 살아남을 수 있을지 구하세요.
+
+  답안:
+  import java.io.*;
+import java.util.*;
+
+public class Main {
+    
+    static class Edge {
+        int to;
+        int limit;
+
+        Edge(int to, int limit) {
+            this.to = to;
+            this.limit = limit;
+        }
+    }
+    
+    static int dijkstra(int start, int end, List<List<Edge>> graph) {
+        int n = graph.size();
+        int[] maxLimit = new int[n];
+        boolean[] visited = new boolean[n];
+
+        Arrays.fill(maxLimit, Integer.MIN_VALUE);
+        maxLimit[start] = Integer.MAX_VALUE;
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(b[1], a[1]));
+        pq.offer(new int[]{start, Integer.MAX_VALUE});
+        
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
+            int node = current[0];
+            int currentLimit = current[1];
+            
+            if (visited[node]) continue;
+            visited[node] = true;
+
+            for (Edge edge : graph.get(node)) {
+                int newLimit = Math.min(currentLimit, edge.limit);
+                if (newLimit > maxLimit[edge.to]) {
+                    maxLimit[edge.to] = newLimit;
+                    pq.offer(new int[]{edge.to, newLimit});
+                }
+            }
+        }
+        
+        return maxLimit[end] == Integer.MIN_VALUE ? -1 : maxLimit[end];
+    }
+    
+    public static void main(String[] args) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+
+        int nodeCount = scanner.nextInt();
+        int edgeCount = scanner.nextInt();
+
+        List<List<Edge>> graph = new ArrayList<>(nodeCount + 1);
+        for (int i = 0; i <= nodeCount; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < edgeCount; i++) {
+            int start = scanner.nextInt();
+            int end = scanner.nextInt();
+            int limit = scanner.nextInt();
+            graph.get(start).add(new Edge(end, limit));
+            graph.get(end).add(new Edge(start, limit));
+        }
+
+        int start = scanner.nextInt();
+        int end = scanner.nextInt();
+
+        int result = dijkstra(start, end, graph);
+        System.out.println(result);
+    }
+}
