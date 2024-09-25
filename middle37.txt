@@ -1,0 +1,87 @@
+문제:
+한 디저트 연구소의 연구 결과에 따르면, 대부분의 젊은 사람은 후식으로 어묵과 파르페를 제공했을 때 파르페를 선택한다고 합니다.
+ 하지만 기성이는 특이한 사람이라 어묵을 매우 좋아합니다.
+
+에이블 디저트는 어묵과 파르페를 판매하는 디저트 가게입니다. 
+에이블 디저트는 특이한 판매 방식으로 X스타그램 등 SNS에서 화제가 되었습니다. 
+어떤 방식이냐면 모든 디저트(어묵 또는 파르페)를 일렬로 나열하고, 양쪽 끝에 놓여있는 디저트만 판매하는 것입니다.
+
+기성이는 에이블 디저트의 모든 어묵을 구매하려고 합니다. 하지만 파르페를 사면 돈이 아깝다고 생각하므로, 
+파르페는 가능한 적게 살 것입니다. 기성이가 어묵을 모두 사려면 파르페를 적어도 몇 개 사야하는지 출력하는 프로그램을 작성해 주세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     String input= scanner.nextLine();
+     char[] input_list=input.toCharArray();
+     Deque<Character> dq= new LinkedList<>();
+     for(int i=0;i<input.length();i++)
+     {
+    	 dq.add(input_list[i]);
+     }
+     
+     int cnt=0;
+     int idx1=0;
+     int idx2=0;
+     while(dq.contains('F'))
+     {
+    	 if(dq.getFirst()=='F')
+    	 {
+    		 dq.removeFirst();
+    		 continue;
+    	 }
+    	 if(dq.getLast()=='F')
+    	 {
+    		 dq.removeLast();
+    		 continue;
+    	 }
+    	 LinkedList<Character> temp=(LinkedList<Character>)dq;
+    	
+    	 
+    	 for(int i=0;i<temp.size();i++)
+    	 {
+    		 if(temp.get(i)=='F')
+    		 {
+    			 idx1=i;
+    			 break;
+    		 }
+    	 }
+    	 
+    	 for(int i=0;i<temp.size();i++)
+    	 {
+    		 if(temp.get(temp.size()-1-i)=='F')
+    		 {
+    			 idx2=i;
+    			 break;
+    		 }
+    	 }
+    	 
+    	 
+    	 if(idx1<idx2)
+    	 {
+    		 dq.removeFirst();
+    		 cnt++;
+    	 }
+    	 else
+    	 {
+    		 dq.removeLast();
+    		 cnt++;
+    	 }
+     }
+
+     System.out.println(cnt); 
+
+ }
+}
