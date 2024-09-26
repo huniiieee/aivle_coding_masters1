@@ -1,0 +1,90 @@
+문제:
+무한히 넓은 좌표평면이 있습니다.
+
+한 번의 이동으로 상하좌우 중 한 방향으로 1 만큼 움직일 수 있습니다. 
+예를 들어 현재 좌표가 (0, 0)이라면, 한 번의 이동으로 갈 수 있는 좌표는 (0, 1), (0, -1), (1, 0), (-1, 0) 의 네 곳입니다.
+
+당신은 (x1, y1)에서 출발해 정확히 N번 이동하여 (x2, y2)에서 멈추려 합니다.
+ 특히, 출발점을 포함해 이동 중 같은 좌표를 두 번 이상 방문해선 안됩니다. 그런 경로의 개수를 알려주세요.
+
+ 답안:
+ //don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	static int path=0;
+	static final int[] dx= {1,0,-1,0};
+	static final int[] dy= {0,1,0,-1};
+	static class Node{
+		private int x;
+	    private int y;
+
+	    public Node(int x, int y) {
+	        this.x = x;
+	        this.y = y;
+	    }
+
+	    @Override
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (o == null || getClass() != o.getClass()) return false;
+	        Node node = (Node) o;
+	        return x == node.x && y == node.y;
+	    }
+
+	    @Override
+	    public int hashCode() {
+	        return Objects.hash(x, y);
+	    }
+	}
+	
+	static void dfs(Set<Node> visited,int x,int y, int a, int b,int cnt)
+	{
+		
+		if(cnt==0)
+		{
+			if((x==a)&&(y==b))
+				path++;
+			return;
+		}
+		
+		
+		
+		for(int i=0;i<4;i++)
+		{
+			int newx = x + dx[i];
+            int newy = y + dy[i];
+			Node temp=new Node(newx,newy);
+			if(!visited.contains(temp))
+			{
+				visited.add(temp);
+				dfs(visited,newx,newy,a,b,cnt-1);
+				visited.remove(temp);
+			}
+		}
+		
+	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     int x=scanner.nextInt();
+     int y=scanner.nextInt();
+     int a=scanner.nextInt();
+     int b = scanner.nextInt(); 
+     Set<Node>set=new HashSet<>();
+     set.add(new Node(x,y));
+     dfs(set,x,y,a,b,num);
+     
+    
+     System.out.println(path); 
+
+ }
+}

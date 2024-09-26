@@ -1,0 +1,79 @@
+문제:
+팰린드롬은 역순으로 읽어도 같은 낱말을 뜻합니다. 
+예를 들어, EYE, MADAM은 팰린드롬이지만 APPLE, CODE는 아닙니다.
+여러분에게 문자열들이 주어집니다. 이 문자열들을 적절히 재배열해서, 
+하나의 팰린드롬 문자열을 만들 수 있는지 여부를 출력하는 프로그램을 작성해 주세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	static boolean flag=false;
+	static boolean pd(String s)
+    {
+        int len=s.length();
+        for(int i=0;i<len/2;i++)
+        {
+        	if(s.charAt(i)!=s.charAt(len-1-i))
+        	{
+        		return false;
+        	}
+        		
+        }
+        return true;
+    }
+	
+	static void permu(String []arr,int depth,int n,int r)
+	{
+		if(depth==r)
+		{
+			String temp=String.join("", arr);
+			if (pd(temp))
+				flag=true;
+			return;
+		}
+		
+		for(int i=depth;i<n;i++)
+		{
+			swap(arr,depth,i);
+			permu(arr,depth+1,n,r);
+			swap(arr,depth,i);
+		}
+	}
+	
+	static void swap(String []arr,int a,int b)
+	{
+		String temp=arr[a];
+		arr[a]=arr[b];
+		arr[b]=temp;
+	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     scanner.nextLine();
+     String [] arr= new String[num];
+     for(int i=0;i<num;i++)
+     {
+    	 String temp=scanner.nextLine();
+    	 arr[i]=temp;
+     }
+     
+     permu(arr,0,num,num);
+     
+     if(flag)
+    	 System.out.println("YES");
+     else
+    	 System.out.println("NO");
+    	 
+
+ }
+}

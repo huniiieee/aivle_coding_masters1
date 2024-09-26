@@ -1,0 +1,124 @@
+문제: (BFS)
+테트리스는 테트로미노를 이용한 게임입니다. 
+테트로미노란, 정사각형 4개를 변이 인접하도록 이어붙여 만든 도형을 뜻합니다.
+ 테트로미노는 거울상인 두 도형을 같다고 생각했을 때 총 5종류가 존재합니다.
+다섯 종류의 테트로미노는 다음과 같습니다.
+
+####
+
+##
+##
+
+###
+#..
+
+##.
+.##
+
+###
+.#.
+
+입력으로 주어진 도형이 하나의 테트로미노인지 판별하세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	static int[] dx= {-1,0,1,0};
+	static int[] dy= {0,-1,0,1};
+	
+	static class Node{
+		int x,y;
+		Node(int x,int y)
+		{
+			this.x=x;
+			this.y=y;
+		}
+	}
+	static void bfs(char [][]map,int x,int y)
+	{
+		Queue<Node> q=new LinkedList<>();
+		
+		q.offer(new Node(x,y));
+		while(!q.isEmpty())
+		{
+			Node cur=q.poll();
+			map[cur.x][cur.y]='.';
+			for(int i=0;i<4;i++)
+			{
+				int nx=cur.x+dx[i];
+				int ny=cur.y+dy[i];
+				if(nx>=0&&nx<5&&ny>=0&&ny<5&&map[nx][ny]=='#')
+				{
+					q.offer(new Node(nx,ny));
+				}
+			}
+		}
+		
+	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     char [][]map=new char[5][5];
+     int cnt=0;
+     for(int i=0;i<5;i++)
+     {
+    	 String s=scanner.nextLine();
+    	 for(int j=0;j<5;j++)
+    	 {
+    		 map[i][j]=s.charAt(j);
+    		 if(map[i][j]=='#')
+    			 cnt++;
+    	 }
+     }
+ 	
+    if(cnt!=4)
+    {
+    	System.out.println("NO");
+    	return;
+    }
+	boolean flag=false;
+	for(int i=0;i<5;i++)
+	{
+		for(int j=0;j<5;j++)
+		{
+			if(map[i][j]=='#')
+			{
+				bfs(map,i,j);
+				flag=true;
+				break;
+			}
+				
+		}
+		if(flag)
+			break;
+	}
+	flag=false;
+	for(int i=0;i<5;i++)
+	{
+		for(int j=0;j<5;j++)
+		{
+			if(map[i][j]=='#')
+			{
+				System.out.println("NO");
+				flag=true;
+				break;
+			}
+		}
+		if(flag)
+			break;
+	}
+	if(!flag)
+		System.out.println("YES");
+     //System.out.println(a + b); 
+
+ }
+}
