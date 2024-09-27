@@ -1,0 +1,51 @@
+문제:
+준하는 영화 타짜를 감명깊게 봤습니다. 
+영화에 나오는 손기술을 연습하던 준하는 카드더미에서 맨 윗장 뿐만이 아니라, 
+맨 아래에 있는 카드를 대신 내려놓는 기술을 쓸 수 있게 되었습니다!
+1부터 N까지 수가 쓰여져 있는 N장의 카드 더미가 주어집니다. 
+이 카드 더미에서 맨 위 또는 맨 아래에 있는 카드를 내려놓는 것을 반복해서, 
+1부터 N까지 차례대로 내려놓을 수 있는지 알려주는 프로그램을 작성해 주세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     
+     Deque<Integer> dq=new LinkedList<>();
+     
+     for(int i=0;i<num;i++)
+     {
+    	 dq.add(scanner.nextInt());
+     }
+
+     for(int i=1;i<=num;i++)
+     {
+    	 if(dq.getFirst()==i)
+    	 {
+    		 dq.removeFirst();
+    	 }
+    	 else if(dq.getLast()==i)
+    	 {
+    		 dq.removeLast();
+    	 }
+    	 else
+    	 {
+    		 System.out.println("NO");
+    		 return;
+    	 }
+     }
+     System.out.println("YES");
+ }
+}

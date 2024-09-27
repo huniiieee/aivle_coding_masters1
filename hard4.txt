@@ -1,0 +1,73 @@
+문제:
+원숭이를 키우는 병규는 어느날 도토리값으로 너무 많은 지출을 한다고 느껴 원숭이들을 불러모았습니다. 
+병규는 원숭이들에게 각자 하루에 원하는 도토리량을 적으라고 하였습니다.
+ 병규는 모든 원숭이가 원하는 양의 도토리를 살 수 있는 경우에는 그대로 구매합니다.
+  반면 그럴 수 없는 경우에는 특정한 정수 상한을 정하여 그 이상의 원숭이의 요청량은 모두 상한으로 배정하고,
+   상한 이하의 도토리량 요청에 대해서는 요청한 도토리를 그대로 배정합니다. 
+
+병규는 모든 원숭이들을 아끼기 때문에 각 원숭이들에게 줄 수 있는 한 많은 도토리를 주려고 합니다.
+병규가 원숭이들에게 줄 수 있는 도토리의 총량과 원숭이들이 각자 원하는 도토리량이 주어졌을 때, 
+원숭이 한마리가 받을 수 있는 도토리 개수의 최대값을 출력하세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     
+     List<Integer> dotori=new ArrayList<>();
+     int max=0;
+     int sum=0;
+     for(int i=0;i<num;i++)
+     {
+    	 dotori.add(scanner.nextInt());
+    	 if(dotori.get(i)>max)
+    		 max=dotori.get(i);
+    	 sum +=dotori.get(i);
+     }
+     int total=scanner.nextInt();
+     if(total>sum)
+    	 System.out.println(max);
+     else
+     {
+    	Collections.sort(dotori);
+
+    	for(int i=1;i<max;i++)
+    	{
+    		
+    		int cnt=0;
+    		
+    		int k=0;
+    		for(k=0;k<num;k++)
+    		{
+    			if(dotori.get(k)<=i)
+    				cnt+=dotori.get(k);
+    			else
+    				break;
+    		}
+    	
+    		cnt=cnt +(num-k)*i;
+
+    		if(cnt>total)
+    		{
+    			 System.out.println(i-1);
+    			 break;
+    		}
+    	}
+    	 
+     }
+     
+
+ }
+}

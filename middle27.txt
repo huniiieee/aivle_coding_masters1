@@ -1,0 +1,95 @@
+문제:
+두 직사각형의 IoU(Intersecton over Union)란 
+(두 직사각형의 교집합의 넓이)/(두 직사각형의 합집합의 넓이) 로 정의됩니다.
+
+x-y 직교 좌표계 위의 모든 변이 x, y 축과 평행한 직사각형들의 정보가 주어집니다.
+가장 큰 IoU 값을 가지는 직사각형의 쌍을 출력하는 프로그램을 작성하세요.
+답이 여러개일 때 사전순으로 가장 앞서는 순서쌍을 출력합니다.
+두 순서쌍 (x, y), (a, b) 에 대해 x < a 이거나 (x=a 이고 y < b) 일 때 (x, y)가 (a, b) 보다 사전순으로 앞선다고 표현합니다.
+
+답안:
+
+// don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+// don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	static class Node{
+		int x,y,w,h;
+		Node(int x,int y,int w,int h)
+		{
+			this.x=x;
+			this.y=y;
+			this.w=w;
+			this.h=h;
+		}
+	}
+	static class Pair{
+		int x,y;
+		double area;
+		Pair(int x,int y,double area)
+		{
+			this.x=x;
+			this.y=y;
+			this.area=area;
+		}
+	}
+	static double check(Node[]nemo,int a,int b)
+	{
+		int w,h;
+		w=Integer.min(nemo[a].x+nemo[a].w,nemo[b].x+nemo[b].w)-Integer.max(nemo[a].x,nemo[b].x);
+		if(w<=0)
+			return 0D;
+		h=Integer.min(nemo[a].y+nemo[a].h,nemo[b].y+nemo[b].h)-Integer.max(nemo[a].y,nemo[b].y);
+		if(h<=0)
+			return 0D;
+		double area=nemo[a].w*nemo[a].h +nemo[b].w *nemo[b].h -w*h;
+		double inter=w*h;
+		return inter/area;
+	}
+    public static void main(String[] args) throws IOException { 
+
+        Scanner scanner = new Scanner(System.in); 
+        
+        int num = scanner.nextInt(); 
+        Node [] nemo=new Node[num];
+        for(int i=0;i<num;i++)
+        {
+        	int x=scanner.nextInt();
+        	int y=scanner.nextInt();
+        	int w=scanner.nextInt();
+        	int h=scanner.nextInt();
+        	nemo[i]=new Node(x,y,w,h);
+        }
+
+        List<Pair> list=new ArrayList<>(); 
+        for(int i=0;i<num-1;i++)
+        {
+        	for(int j=i+1;j<num;j++)
+        	{
+        		list.add(new Pair(i+1,j+1,check(nemo,i,j)));
+        	}
+        }
+        
+        int idx=0;
+        int idy=0;
+        double max=-1D;
+
+        for(Pair temp :list)
+        {
+        	if(temp.area>max)
+        	{
+        		max=temp.area;
+        		idx=temp.x;
+        		idy=temp.y;
+        	}
+        }
+        
+        System.out.println(idx +" "+idy); 
+
+    }
+}
