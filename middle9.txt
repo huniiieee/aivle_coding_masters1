@@ -1,0 +1,123 @@
+문제: (비트마스킹)
+리버스라는 보드 게임이 있습니다. 
+게임 규칙은 이러합니다. 두 명이서 가위바위보를 하고, 
+이긴 사람은 바둑판에 앞면은 검은색, 뒷면은 흰색인 바둑들을 임의로 깔아놓습니다.
+
+가위바위보에서 진 사람은 바둑돌을 뒤집을 수 있는데,
+한번 뒤집을 때 해당 열이나 행의 모든 바둑돌을 뒤집어야 합니다. 
+예를 들어 3 X 3 형태로 바둑돌이 놓여져 있을 때 원하는 바둑돌 하나만 뒤집을 수는 없고, 
+특정한 열이나 행에 해당하는 바둑돌 3개를 모두 뒤집어야 합니다. 
+게임에서 이기기 위해서는 원하는 만큼 바둑돌을 뒤집어서 위에서 보이는 흰색 바둑돌의 개수가 최소가 되어야 합니다.
+
+자연수 N이 주어지고,
+ N X N 형태의 바둑돌들이 주어질 때 바둑돌을 뒤집는 사람이 만들 수 있는 위에서 보이는 흰색 바둑돌의 최소 개수를 출력하는 프로그램을 만드세요.
+
+ 답안:
+ 
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	
+	static int cntWhite(int [][]map)
+	{
+		int cnt=0;
+		for(int []row:map)
+		{
+			for(int r:row)
+			{
+				cnt+=r;
+			}
+		}
+		return cnt;
+	}
+	
+	static void flipRow(int [][]map,int r)
+	{
+		int n=map.length;
+		for(int i=0;i<n;i++)
+			map[r][i]=map[r][i]^1;
+	}
+	
+	static void flipCol(int [][]map,int c)
+	{
+		int n=map.length;
+		for(int i=0;i<n;i++)
+			map[i][c]=map[i][c]^1;
+	}
+	
+	static int findMinWhite(int[][]map)
+	{
+		int n=map.length;
+		int minWhite=n*n;
+		
+		for(int rBM=0;rBM<(1<<n);rBM++)
+		{
+			
+			int[][] Board1=new int[n][n];
+			for(int i=0;i<n;i++)
+			{
+				Board1[i]=Arrays.copyOf(map[i], n);
+			}
+			for(int i=0;i<n;i++)
+			{
+				if((rBM&(1<<i))!=0)
+				{
+					flipRow(Board1,i);
+				}
+			}
+			
+			for(int cBM=0;cBM<(1<<n);cBM++)
+			{
+				int[][] Board2=new int[n][n];
+				for(int i=0;i<n;i++)
+				{
+					Board2[i]=Arrays.copyOf(Board1[i], n);
+				}
+				for(int i=0;i<n;i++)
+				{
+					if((cBM&(1<<i))!=0)
+					{
+						flipCol(Board2,i);
+					}
+				}
+				int cnt=cntWhite(Board2);
+				minWhite=Integer.min(cnt,minWhite);
+				
+			}
+			
+		}
+		return minWhite;
+	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int num = scanner.nextInt(); 
+     scanner.nextLine();
+     int [][] map= new int[num][num];
+     
+     for(int []row :map)
+     {
+    	 String temp=scanner.nextLine();
+    	 char[] tempToCharArray=temp.toCharArray();
+    	 for(int i=0;i<num;i++)
+    	 {
+    		 if(tempToCharArray[i]=='B')
+    			 row[i]=0;
+    		 else
+    			 row[i]=1;
+    	 }
+     }
+     
+ 
+     System.out.println(findMinWhite(map));
+     
+ }
+}
