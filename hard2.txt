@@ -1,0 +1,130 @@
+문제:
+빈동이는 동물원의 안전 책임자입니다. 
+동물원은 N행 M열의 격자, 총 N × M 칸으로 나눌 수 있습니다.
+어느 날 재규어들이 우리에서 탈출했습니다. 이 재규어들은 매우 공격적이라 당장 포획할 수 없습니다. 
+빈동이는 입장객들에게 대피하라고 알린 뒤, 날뛰는 재규어를 막을 방법을 찾아냈습니다.
+
+동물원은 빈 칸, 재규어가 있는 칸, 울타리가 있는 칸으로 구분할 수 있습니다. 
+재규어들은 상하좌우 중 한 방향으로 인접한 빈 칸으로 이동할 수 있으며, 동물원 밖으로 나가지 못합니다. 
+빈동이의 목표는 3개의 여분 울타리를 반드시 모두 설치해, 재규어가 도달할 수 없는 칸의 수를 최대화 하는 것입니다. 
+여분 울타리는 빈 칸에만 설치할 수 있고, 설치하면 그 칸은 울타리가 있는 칸이 됩니다. 
+빈동이가 목표를 달성했을 때, 재규어가 도달할 수 없는 빈 칸의 수를 출력하는 프로그램을 작성하세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	static int max=-1;
+	static int[]dx= {-1,0,1,0};
+	static int[]dy= {0,-1,0,1};
+	static class Node{
+		int x,y;
+		Node(int x,int y)
+		{
+			this.x=x;
+			this.y=y;
+		}
+	}
+	static int bfs(int[][]map)
+	{
+		for(int i=0;i<map.length;i++)
+		{
+			for(int j=0;j<map[0].length;j++)
+			{
+				if(map[i][j]==2)
+				{
+					Queue<Node> q=new LinkedList<>();
+					q.offer(new Node(i,j));
+					while(!q.isEmpty())
+					{
+						Node cur=q.poll();
+						for(int k=0;k<4;k++)
+						{
+							int nx=cur.x+dx[k];
+							int ny=cur.y+dy[k];
+							
+							if(nx>=0&&nx<map.length&&ny>=0&&ny<map[0].length&&map[nx][ny]==0)
+							{
+								map[nx][ny]=2;
+								q.offer(new Node(nx,ny));
+							}
+						}
+						
+					}
+				}
+				
+			}
+		}
+		
+		int cnt=0;
+		for(int i=0;i<map.length;i++)
+		{
+			for(int j=0;j<map[0].length;j++)
+			{
+				if(map[i][j]==0)
+					cnt++;
+			}
+		}
+		return cnt;
+	}
+	static void backTrack(int[][]map,int cnt)
+	{
+		if(cnt==3)
+		{
+			int [][]temp=new int[map.length][map[0].length];
+
+			for(int i=0;i<map.length;i++)
+			{
+				temp[i]=Arrays.copyOf(map[i], map[0].length);
+			}
+			int tempCnt=bfs(temp);
+			if(tempCnt>max)
+				max=tempCnt;
+			return;
+		}
+		
+		for(int i=0;i<map.length;i++)
+		{
+			for(int j=0;j<map[0].length;j++)
+			{
+				if(map[i][j]==0)
+				{
+					map[i][j]=1;
+					backTrack(map,cnt+1);
+					map[i][j]=0;
+				}
+			}
+		}
+	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int row = scanner.nextInt(); 
+
+     int col = scanner.nextInt(); 
+
+     
+     int [][]map=new int[row][col];
+     for(int i=0;i<row;i++)
+     {
+    	 for(int j=0;j<col;j++)
+    	 {
+    		 map[i][j]=scanner.nextInt();
+    	 }
+     }
+     
+     backTrack(map,0);
+     
+     
+     System.out.println(max); 
+
+ }
+}
