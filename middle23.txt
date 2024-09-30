@@ -1,0 +1,97 @@
+문제:(모든 경우를 다 확인!)
+슬라이딩 퍼즐을 풀어봅시다.
+슬라이딩 퍼즐은 2 x 2의 판에서 각 조각들을 인접한 비어있는 칸으로 밀어서 최종적으로
+12
+3X
+의 형태로 만드는 퍼즐입니다. X는 비어있는 칸을 말합니다.
+슬라이딩 퍼즐이 입력으로 주어졌을 때, 퍼즐을 풀기 위한 최소 조각 이동 횟수를 출력하세요.
+
+답안:
+
+//don't place package name. 
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	static void rR(char[][]map,int r)
+	{
+		char temp=map[r][0];
+		map[r][0]=map[r][1];
+		map[r][1]=temp;
+	}
+	
+	static void rC(char[][]map,int c)
+	{
+		char temp=map[0][c];
+		map[0][c]=map[1][c];
+		map[1][c]=temp;
+	}
+	
+	static boolean check(char[][] map)
+	{
+		if(map[0][0]=='1'&&map[0][1]=='2'&&map[1][0]=='3'&&map[1][1]=='X')
+			return true;
+		return false;
+	}
+	
+	static int result(char[][]map,int x,int y)
+	{
+		int cx=x;
+		int cy=y;
+		for(int i=1;i<=12;i++)
+		{
+			if(i%2==1)
+			{
+				rR(map,cx);
+				cy=(cy+1)%2;
+			}
+			else
+			{
+				rC(map,cy);
+				cx=(cx+1)%2;
+			}
+			if(check(map))
+			{
+				if(i<6)
+					return i;
+				else
+					return 12-i;
+			}
+				
+		}
+		return -1;
+	}
+	
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     char [][]map=new char[2][2];
+     int startX=0;
+     int startY=0;
+     for(int i=0;i<2;i++)
+     {
+    	 String temp= scanner.nextLine();
+    	 for(int j=0;j<2;j++)
+    	 {
+    		 map[i][j]=temp.charAt(j);
+    		 if(map[i][j]=='X')
+    		 {
+    			 startX=i;
+    			 startY=j;
+    		 }
+    	 }
+     }
+
+  
+     System.out.println(result(map,startX,startY));
+
+  
+
+ }
+}
