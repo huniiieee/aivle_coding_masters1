@@ -1,32 +1,87 @@
-문제:(dfs+ 백트래킹)
-무한히 넓은 좌표평면이 있습니다.
+문제:
+길이가 3인 단어 6개가 주어집니다. 이 단어들을 이용해 3 x 3 크기의 낱말 퍼즐을 만드는 프로그램을 작성해 주세요.
+출력한 3 x 3 크기의 낱말 퍼즐에는 가로로 읽은 단어 3개와, 세로로 읽은 단어 3개가 입력으로 주어진 6개의 단어와 일대일로 매칭되어야 합니다.
 
-한 번의 이동으로 상하좌우 중 한 방향으로 1 만큼 움직일 수 있습니다.
- 예를 들어 현재 좌표가 (0, 0)이라면, 한 번의 이동으로 갈 수 있는 좌표는 (0, 1), (0, -1), (1, 0), (-1, 0) 의 네 곳입니다.
+답안:
 
-당신은 (x1, y1)에서 출발해 정확히 N번 이동하여 (x2, y2)에서 멈추려 합니다.
- 특히, 출발점을 포함해 이동 중 같은 좌표를 두 번 이상 방문해선 안됩니다. 그런 경로의 개수를 알려주세요.
-
- 답안:
-
-// don't place package name. 
 
 import java.io.*;
 
 import java.util.*; 
 
-// don't change 'Main' class name and  'public' accessor. 
+//don't change 'Main' class name and  'public' accessor. 
 
 public class Main {
-    public static void main(String[] args) throws IOException { 
+	static boolean flag=false;
+	
+	static boolean check(List<String> list,List<String>temp)
+	{
+		
+		List<String> copyList= new ArrayList<>();
+		for(int i=0;i<6;i++)
+			copyList.add(list.get(i));
+		for(int i=0;i<3;i++)
+		{
+			copyList.remove(temp.get(i));
+		}
+		for(int i=0;i<3;i++)
+		{
+			StringBuilder tmp=new StringBuilder();
+			tmp.append(temp.get(0).charAt(i));
+			tmp.append(temp.get(1).charAt(i));
+			tmp.append(temp.get(2).charAt(i));
+			if (!copyList.contains(tmp.toString())) {
+                return false;
+			}	
+			if (copyList.contains(tmp.toString())) {
+                copyList.remove(tmp.toString());
+			}
+		}
+		return true;
+	}
+	static void puzzle(List<String> list,int step,List<String>temp,boolean[] visited)
+	{
+		if(flag)
+			return;
+		if(step==3)
+		{
+			if(check(list,temp))
+			{
+				flag=true;
+				for (String s : temp) {
+	                    System.out.println(s); // 선택된 가로 단어 출력
+	            }
+			}
+			return;
+		}
+		
+		for(int i=0;i<6;i++)
+		{
+			if(!visited[i])
+			{
+				visited[i]=true;
+				temp.add(list.get(i));
+				puzzle(list,step+1,temp,visited);
+				visited[i]=false;
+				temp.remove(temp.size() - 1);
+			}
+		}
+	}
+ public static void main(String[] args) throws IOException { 
 
-        Scanner scanner = new Scanner(System.in); 
+     Scanner scanner = new Scanner(System.in); 
 
-        int a = scanner.nextInt(); 
+     List<String> list= new ArrayList<>();
+     List<String> temp=new ArrayList<>();
+     boolean[]visited=new boolean[6];
+     for(int i=0;i<6;i++)
+    	 list.add(scanner.nextLine());
+     
+     list.sort(null);
+     puzzle(list,0,temp,visited);
+     if(!flag)
+    	 System.out.println("NO");
+     
 
-        int b = scanner.nextInt(); 
-
-        System.out.println(a + b); 
-
-    }
+ }
 }

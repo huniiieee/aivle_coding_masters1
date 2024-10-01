@@ -1,0 +1,107 @@
+문제:(백트래킹)
+재승이는 길이가 K인 문자열을 이용해 N행 M열의 사각형 격자 위에 그림을 그렸다고 주장하고 있습니다. 
+재승이의 말에 따르면, 그림을 그린 방법은 다음과 같습니다.
+
+1. 아무 칸이나 골라 첫번째 문자를 쓴다.
+2. i ( 2 ≤ i ≤ K )번째 문자는 i-1번째 문자를 쓴 칸과 한 변을 공유하는 칸들 중 하나를 선택해 쓴다. 
+단, 격자를 벗어나거나 이미 문자가 쓰여있는 칸을 선택하는 것은 불가능하다.
+3. 그림을 그리는 과정에서 문자열의 순서에 따라 이미 사용한 문자는 다시 사용할 수 없다.
+
+위와 같이 그림을 완성하면 격자에 문자가 적힌 칸은 K개, 그렇지 않은 칸은 N×M - K개임을 알 수 있습니다.
+문자열이 주어지면 재승이의 방법대로 같은 그림을 그릴 수 있는지 알려주세요.
+
+답안:
+
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	static int cnt=0;
+	static int startX=0;
+	static int startY=0;
+	static boolean[][]result;
+	static boolean check(char[][]map,boolean[][] visited,String s,int r,int c,int step,int pr,int pc)
+	{
+		if(step==0)
+			return true;
+		else
+		{
+			if(r==pr+1&&pc==c)
+				return true;
+			else if(r==pr-1&&pc==c)
+				return true;
+			else if(r==pr&&c==pc-1)
+				return true;
+			else if(r==pr&&c==pc+1)
+				return true;
+			else
+				return false;
+		}
+	}
+	static void artist(char[][]map,boolean[][]visited,String s,int step,int r,int c)
+	{
+		if(step==s.length())
+		{
+			if(!result[startX][startY])
+			{
+				cnt++;
+				result[startX][startY]=true;
+			}
+			return;
+		}
+		
+		for(int i=0;i<map.length;i++)
+		{
+			for(int j=0;j<map[0].length;j++)
+			{
+				if((map[i][j]==s.charAt(step))&&(!visited[i][j]))
+				{
+					if(step==0)
+					{
+						startX=i;
+						startY=j;
+					}
+					if(check(map,visited,s,i,j,step,r,c))
+					{
+						visited[i][j]=true;
+						artist(map,visited,s,step+1,i,j);
+						visited[i][j]=false;
+					}
+				}
+			}	
+		}
+	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     String s=scanner.nextLine();
+     int r=scanner.nextInt();
+     int c=scanner.nextInt();
+     scanner.nextLine();
+     char [][]map =new char[r][c];
+     result=new boolean[r][c];
+     int dotCnt=0;
+     for(int i=0;i<r;i++)
+     {
+    	 String temp=scanner.nextLine();
+    	 for(int j=0;j<c;j++)
+    	 {
+    		 map[i][j]=temp.charAt(j);
+    		 if(map[i][j]=='.')
+    			 dotCnt++;
+    	 }
+     }
+     if(dotCnt+s.length()!=r*c)
+     {
+    	 System.out.println(0);
+    	 return;
+     }
+     boolean [][] visited=new boolean[r][c];
+     artist(map,visited,s,0,0,0);
+     System.out.println(cnt);
+ }
+}

@@ -5,12 +5,12 @@
   바위굴들에 대한 정보가 주어졌을 때, 오디세우스가 각 바위굴들을 지나가는 시간을 최대 몇으로 정해야 살아남을 수 있을지 구하세요.
 
   답안:
-  import java.io.*;
+import java.io.*;
 import java.util.*;
 
 public class Main {
     
-    static class Edge {
+    static class Edge implements Comparable<Edge> {
         int to;
         int limit;
 
@@ -18,32 +18,36 @@ public class Main {
             this.to = to;
             this.limit = limit;
         }
+        public int compareTo(Edge other)
+        {
+            return other.limit - this.limit;
+        }
     }
     
     static int dijkstra(int start, int end, List<List<Edge>> graph) {
         int n = graph.size();
         int[] maxLimit = new int[n];
-        boolean[] visited = new boolean[n];
+        
 
         Arrays.fill(maxLimit, Integer.MIN_VALUE);
-        maxLimit[start] = Integer.MAX_VALUE;
+        maxLimit[start] = 0;
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(b[1], a[1]));
-        pq.offer(new int[]{start, Integer.MAX_VALUE});
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        pq.offer(new Edge(start,Integer.MAX_VALUE));
         
         while (!pq.isEmpty()) {
-            int[] current = pq.poll();
-            int node = current[0];
-            int currentLimit = current[1];
+            Edge current = pq.poll();
+            int node = current.to;
+            int currentLimit = current.limit;
             
-            if (visited[node]) continue;
-            visited[node] = true;
+            if(maxLimit[node]>currentLimit)
+                continue;
 
             for (Edge edge : graph.get(node)) {
                 int newLimit = Math.min(currentLimit, edge.limit);
                 if (newLimit > maxLimit[edge.to]) {
                     maxLimit[edge.to] = newLimit;
-                    pq.offer(new int[]{edge.to, newLimit});
+                    pq.offer(new Edge(edge.to,newLimit));
                 }
             }
         }
@@ -57,6 +61,7 @@ public class Main {
         int nodeCount = scanner.nextInt();
         int edgeCount = scanner.nextInt();
 
+        //리스트 초기화
         List<List<Edge>> graph = new ArrayList<>(nodeCount + 1);
         for (int i = 0; i <= nodeCount; i++) {
             graph.add(new ArrayList<>());

@@ -1,0 +1,73 @@
+문제:
+사과 게임은 1부터 9까지의 수가 쓰여있는 N x M크기의 격자에서, 
+직사각형 모양의 구역을 드래그 해 안에 있는 수의 합이 10이 되도록 하는 게임입니다.
+ 격자가 주어질 때, 안에 있는 수의 합이 10이 되도록하는 직사각형의 개수를 출력하는 프로그램을 작성해 주세요.
+
+ 답안:
+ 
+import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+	
+	static int sum(int[][]map,int row1,int row2, int col1,int col2)
+	{
+		int cnt=0;
+		for(int i=row1;i<=row2;i++)
+		{
+			for(int j=col1;j<=col2;j++)
+			{
+				cnt+=map[i][j];
+			}
+		}
+		return cnt;
+	}
+	static int check(int [][]map)
+	{
+		int cnt=0;
+		int row=map.length;
+		int col=map[0].length;
+		for(int i=0;i<row;i++)
+		{
+			for(int j=i;j<row;j++)
+			{
+				for(int k=0;k<col;k++)
+				{
+					for(int t=k;t<col;t++)
+					{
+						if(sum(map,i,j,k,t)==10)
+						{
+							cnt++;
+						}
+							
+					}
+				}
+			}
+		}
+		return cnt;
+	}
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int row = scanner.nextInt(); 
+
+     int col = scanner.nextInt(); 
+
+     int [][]map=new int[row][col];
+     for(int i=0;i<row;i++)
+     {
+    	 for(int j=0;j<col;j++)
+    	 {
+    		 map[i][j]=scanner.nextInt();
+    	 }
+     }
+     
+     
+     System.out.println(check(map)); 
+
+ }
+}
