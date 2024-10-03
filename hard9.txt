@@ -1,0 +1,60 @@
+문제:
+교실은 N행 M열의 격자, 총 N × M 칸으로 나눌 수 있고, 모든 칸은 정사각형입니다.
+ 각 칸의 중앙에는 학생이 한 명씩 있습니다. 모든 학생은 각자 자신이 좋아하는 수가 적힌 종이를 들고 있습니다. 
+ 선생님은 서로 같은 수가 적힌 종이를 들고 있는 서로 다른 4명의 학생의 위치를 네 꼭짓점으로 하는 정사각형들을 만들었습니다.
+ 단, 정사각형의 변은 교실의 벽 중 하나와 평행해야 합니다. 선생님이 만든 정사각형들 중 가장 넓은 것의 넓이를 출력하는 프로그램을 작성하세요.
+
+ 답안:
+ import java.io.*;
+
+import java.util.*; 
+
+//don't change 'Main' class name and  'public' accessor. 
+
+public class Main {
+ public static void main(String[] args) throws IOException { 
+
+     Scanner scanner = new Scanner(System.in); 
+
+     int row = scanner.nextInt(); 
+
+     int col = scanner.nextInt();
+     
+     int[][]map=new int[row][col];
+     
+     for(int i=0;i<row;i++)
+     {
+    	 for(int j=0;j<col;j++)
+    	 {
+    		 map[i][j]=scanner.nextInt();
+    	 }
+     }
+     
+
+     int max=Integer.MIN_VALUE;
+     for(int i=0;i<row-1;i++)
+     {
+    	 for(int j=i+1;j<row;j++)
+    	 {
+    		 for(int k=0;k<col-1;k++)
+    		 {
+    			 for(int t=k+1;t<col;t++)
+    			 {
+    				 if(j-i==t-k)
+    				 {
+    					 if((map[i][k]==map[i][t])&&(map[i][t]==map[j][k])&&(map[j][k]==map[j][t]))
+    					 {
+    						 int area=(j-i+1)*(j-i+1);
+    							if(area>max)
+    								max=area;
+    					 }
+    				 }
+    			 }
+    		 }
+    	 }
+     }
+
+     System.out.println(max);
+ 	
+ }
+}
